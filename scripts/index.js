@@ -1,4 +1,6 @@
 // console.log('this is my marriage day')
+
+// removing active class
 function removeActiveClass(){
     const activeButtons = document.getElementsByClassName("active")
 
@@ -8,6 +10,7 @@ function removeActiveClass(){
     console.log(activeButtons)
 }
 
+// load categories on buttons dynamically
 function loadCategories(){
     // fetch the data
 
@@ -15,6 +18,8 @@ function loadCategories(){
     .then((res)=> res.json())
     .then((data) => displayCategories(data.categories))
 }
+
+// load category videos by id
 
 const loadCategoryVideos = (id) => {
     
@@ -35,6 +40,22 @@ const loadCategoryVideos = (id) => {
     })
 }
 
+const loadVideoDetails =(videoId) => {
+    console.log(videoId)
+    const url =`
+    https://openapi.programming-hero.com/api/phero-tube/video/${videoId}
+    `;
+    fetch(url)
+    .then((res) => res.json())
+    .then((data) => displayVideoDetails(data.video));
+
+}
+
+const displayVideoDetails =(video) => {
+    console.log(video);
+};
+
+// display category buttons
 function displayCategories(categories){
 //    get the container
 const categoryCOntainer = document.getElementById("category-container");
@@ -60,6 +81,7 @@ for (let cat of categories){
 
 }
 
+// loading videos
 function loadVideos(){
     fetch("https://openapi.programming-hero.com/api/phero-tube/videos")
     .then((response) => response.json())
@@ -70,6 +92,7 @@ function loadVideos(){
     })
 }
 
+// displaying videos
 const displayVideos = (videos) => {
     const videoContainer = document.getElementById("video-container")
     videoContainer.innerHTML ="";
@@ -115,6 +138,7 @@ const displayVideos = (videos) => {
             <p class="text-sm text-gray-400 flex gap-1">${video.others.views} views </p>
         </div>
         </div>
+        <button onclick=loadVideoDetails('${video.video_id}') class="btn btn-block"> Show Details</button>
     </div>
         `;
 
