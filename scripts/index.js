@@ -40,6 +40,7 @@ const loadCategoryVideos = (id) => {
     })
 }
 
+// load video details dynamically
 const loadVideoDetails =(videoId) => {
     console.log(videoId)
     const url =`
@@ -51,8 +52,16 @@ const loadVideoDetails =(videoId) => {
 
 }
 
+// display video details 
 const displayVideoDetails =(video) => {
     console.log(video);
+    document.getElementById("video_details").showModal();
+    const detailsContainer = document.getElementById("details-container");
+
+    detailsContainer.innerHTML = `
+        <h2>${video.title}</h2>
+    `;
+
 };
 
 // display category buttons
@@ -82,8 +91,8 @@ for (let cat of categories){
 }
 
 // loading videos
-function loadVideos(){
-    fetch("https://openapi.programming-hero.com/api/phero-tube/videos")
+function loadVideos(searchText = ""){
+    fetch(`https://openapi.programming-hero.com/api/phero-tube/videos?title=${searchText}`)
     .then((response) => response.json())
     .then((data) => {
         removeActiveClass();
@@ -130,10 +139,15 @@ const displayVideos = (videos) => {
             </div>
         <div class="intro">
             <h2 class="text-sm font-semibold">Midnight Serenade</h2>
-            <p class="text-sm text-gray-400 flex gap-1">${video.authors[0].profile_name}
-                    <img
-                    class="w-5 h-5"
-                    src="https://img.icons8.com/?size=96&id=2sZ0sdlG9kWP&format=png" alt="">
+            <p class="text-sm text-gray-400 flex gap-1">
+                    ${video.authors[0].profile_name}
+                    ${video.authors[0].verified == true ? 
+                        `<img
+                            class="w-5 h-5"
+                            src="https://img.icons8.com/?size=96&id=2sZ0sdlG9kWP&format=png" alt="">`
+                            : ``}
+
+                    
             </p>
             <p class="text-sm text-gray-400 flex gap-1">${video.others.views} views </p>
         </div>
@@ -147,5 +161,10 @@ const displayVideos = (videos) => {
         videoContainer.appendChild(videoCard)
     });
 }
+
+document.getElementById('search-input').addEventListener("keyup", (e) =>{
+    const input = e.target.value;
+    loadVideos(input)
+})
 
 loadCategories();
